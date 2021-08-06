@@ -1,0 +1,169 @@
+<!--
+Copyright (c) 2020 LG Electronics Inc.
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logitics</title>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
+    <link rel="stylesheet" href="map.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-light container">
+<nav class="navbar  bg-light" id="navbar">
+  <div class="container">
+    <div>
+      <img src="logo.png" alt="" width="50" height="50">
+      <a style="font-weight: bold; color: black;" class="navbar-brand" href="index.html">Logitics</a>
+    </div>
+    <div>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="#scrollspyHeading0">Hackathon </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="#scrollspyHeading1">Problem</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="#scrollspyHeading2">Innovation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="#scrollspyHeading3">Vision</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="#scrollspyHeading4">About us</a>
+        </li>
+        
+        </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<div class="w3-content w3-display-container">
+  <img class="mySlides" src="image1.jpg" style="width:100%">
+  <img class="mySlides" src="image2.jpg" style="width:100%">
+  <img class="mySlides" src="image3.jpg" style="width:100%">
+
+  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+</div>
+
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+</script>
+  
+
+    <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+      <h4 id="scrollspyHeading0" class="mt-5">Hackathon</h4>
+         <p class="text-justify">In collaboration with LGSI <b>Team CU07 Logitics</b> 
+         </p>
+         <div class="row">
+           <div class="col-2">
+            <img src="icon1.png" alt="" style="margin-right: 10px;">
+            <p>Made using webos</p>
+           </div>
+           <div class="col-2">
+            <img src="opencv.png" alt="" width="80" height="80" style="margin-right: 10px;" >
+            <p>Facial detection using opencv</p>
+           </div>
+         <div class="col-2">
+          <img src="tracking.png" alt="" width="80" height="80" style="margin-right: 10px;">
+          <p>Real time tracking using gps</p>
+         </div>
+         <div class="col-2">
+          <img src="rpi.png" alt="" width="80" height="80" style="margin-right: 10px;">
+          <p>Raspberry pi 3</p>
+         </div>
+         <div class="col-2">
+          <img src="db.png" alt="" width="80" height="80" style="margin-right: 10px;">
+          <p>db service</p>
+         </div>
+         <div>
+          <div style="text-align:center;margin: auto; margin-top: 2em; margin-bottom: 2em;">
+            <a href="drowsiness.html">	<button type="button" class="btn btn-lg" style="background-color: #0922b3;color: white;">Drowsiness detector</button></a>
+          <a href="live.html"> <button type="button" class="btn  btn-lg" style="background-color: #0922b3;color: white;">Live tracking and analytics</button></a>
+         </div>
+      <h3 id="scrollspyHeading1" class="mt-5">Problem</h3>
+      <p class="text-justify">There are many challenges faced in the logistics and transportation industry. Be it fuel costs, Business process, Transparency among customers & vehicle owners, lack of traceability and security of the vehicle, supply chain visibility, trust among the drivers, the services, the owners and the mediators. Logistics and transportation are among the topmost (India's logistics industry worth $215 bn) industries that support the backbone of the country’s mobility. 
+        This industry which keeps us moving is extremely uncertain and insecure in today’s scenario. Many vehicle owners and companies lose money, expend on extra fuel costs (then required) and missing vehicle components is another big concern and for the driver’s community, it becomes equally difficult with these instances to build the amount of trust required. 
+        </p>
+      <h4 id="scrollspyHeading2" class="mt-5">Innovation</h4>
+      <p class="text-justify">With the exponential growth of technology in the world, Our mobile industry needs to catch up the pace with the current innovations and provide the value that industry stakeholders truly deserves. Starting with making the process secure and transparent, estimating the real-time fuel consumption, driver monitoring with a smart alert based system and extending the same for preventing accidents while taking insurance companies in confidence. The scope of innovation and invention is tremendous. 
+      </p>
+      <h4 id="scrollspyHeading3" class="mt-5">Vision</h4>
+      <p class="text-justify">Basically our project provides a brief overview on logistics management, Analysis and tracking. Our project is divided on providing analytical solutions like fuel usage, travelled distance, waiting time, driver performance etc which would in turn improve customer satisfaction and over all business objectives, and also monitor driver drowsiness using artificial intelligence which could alert the the driver and also update the status in record. This could help in a safer and efficient management of transportation and logistic. We would also track the progress of the vehicle using gps module in raspberry pi to update the status and to get live feedback on the location of the vehicle and display all of the data and analytics on a hosted web application which would be interactive and help manage data and improve the business outcomes.
+      </p>
+      <a href="#navbar" style="float: right;">Back to top</a>
+      <h4 id="scrollspyHeading4" class="mt-5">About us</h4>
+        <div class="container">
+          <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+              <table class="table table-striped">
+
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Register </th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Aayush Bhatt</td>
+                    <td>1860457</td>
+                    <td>aayush.bhatt@btech.christuniversity.in</td>
+                  </tr>
+                  <tr>
+                    <td>Shubhkar</td>
+                    <td>1860479</td>
+                    <td>shubhkar.yadav@btech.christuniversity.in</td>
+                  </tr>
+                  <tr>
+                    <td>Mohit</td>
+                    <td>1860460</td>
+                    <td>appari.sai@btech.christuniversity.in</td>
+                  </tr>
+                  <tr>
+                    <td>Saharsh </td>
+                    <td>1860424</td>
+                    <td>saharsh.pamecha@btech.christuniversity.in</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+         
+         </div>
+    </div>
+  </div>
+
+</body>
+</html>

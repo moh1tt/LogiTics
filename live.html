@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logitics</title>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
+    <link rel="stylesheet" href="map.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  window.onload = function() {
+      var bridge = new WebOSServiceBridge();
+      /*
+       *  getTimeApi calls gettime of systemservice, a module in the platform.
+       */
+      var getTimeApi = 'luna://com.webos.service.systemservice/clock/getTime';
+      var getTimeParams = '{}';
+
+      /*
+       *  helloApi calls the hello method of js_service template provided by CLI.
+       *  In this case, the service name is used as default name "com.domain.app.service" is.
+       *  If you change this service name, you need to change the service name of the following API.
+       *
+       *  If you change the name to helloparmas as you want, the contents will be reflected on the screen.
+       */
+      var helloApi = 'luna://com.domain.app.service/hello';
+      var helloParams = '{"name":"webOS"}';
+
+      function getTime_callback(msg) {
+          var arg = JSON.parse(msg);
+          if (arg.returnValue) {
+              console.log("[APP_NAME: example web app] GETTIME_SUCCESS UTC : " + arg.utc);
+              //webOSSystem.PmLogString(6, "GETTIME_SUCCESS", '{"APP_NAME": "example web app"}', "UTC : " + arg.utc);
+          } else {
+              console.error("[APP_NAME: example web app] GETTIME_FAILED errorText : " + arg.errorText);
+              //webOSSystem.PmLogString(3, "GETTIME_FAILED", '{"APP_NAME": "example web app"}', "errorText : " + arg.errorText);
+          }
+      }
+
+      function hello_callback(msg) {
+          var arg = JSON.parse(msg);
+          if (arg.returnValue) {
+              document.getElementById("txt_msg").innerHTML = arg.Response;
+              console.log("[APP_NAME: example web app] CALLHELLO_SUCCESS response : " + arg.Response);
+              //webOSSystem.PmLogString(6, "CALLHELLO_SUCCESS", '{"APP_NAME": "example web app"}', "response : " + arg.Response);
+          } else {
+              console.error("[APP_NAME: example web app] CALLHELLO_FAILED errorText : " + arg.errorText);
+              //webOSSystem.PmLogString(3, "CALLHELLO_FAILED", '{"APP_NAME": "example web app"}', "errorText : " + arg.errorText);
+          }
+      }
+
+      bridge.onservicecallback = getTime_callback;
+      bridge.call(getTimeApi, getTimeParams);
+      document.getElementById("txt_msg").onclick = function() {
+          bridge.onservicecallback = hello_callback;
+          bridge.call(helloApi, helloParams);
+      };
+  }
+</script>
+<script type="text/javascript">
+  var Service = require('webos-service');
+  var fs = require('fs');
+  var service = new Service("com.mycom.service.helloworld");
+
+
+  function find() {
+      document.getElementById("check").innerHTML = "Success";
+      var bridge = new WebOSServiceBridge();
+      var uri = 'luna://com.webos.notification/createAlert';
+      var params = JSON.stringify({
+          "message": "hello world",
+          "buttons": [{
+              "label": "launch",
+              "params": {
+                  "id": "com.domain.app1"
+              }
+          }]
+      });
+      function callbackFunc(msg) {
+          var response = JSON.parse(msg);
+          document.getElementById("check2").innerHTML = msg;
+      }
+
+      bridge.onservicecallback = callbackFunc;
+      bridge.call(uri, params);
+
+  }
+
+  function add() {
+      document.getElementById("test1").innerHTML = "NA";
+      var n = document.getElementById("timestamp").value;
+      var e = document.getElementById("count").value;
+
+      document.getElementById("test1").innerHTML = n;
+      document.getElementById("test2").innerHTML = e;
+
+      var bridge = new WebOSServiceBridge();
+      var uri = 'luna://com.webos.service.db/put';
+      var params = `{"objects":[{"_kind":"com.domain.app3:1","timestamp":"${n}","ppl":"${e}"}]}`;
+
+
+      function callback_put(msg) {
+          var response = JSON.parse(msg);
+          document.getElementById("inspect").innerHTML = msg;
+      }
+      bridge.onservicecallback = callback_put;
+      bridge.call(uri, params);
+  }
+
+  function fetch() {
+      console.log("Inside Fetch");
+      document.getElementById("fetch2").innerHTML = "NA";
+      var id = document.getElementById("id").value;
+
+      document.getElementById("test1").innerHTML = id;
+
+      var bridge = new WebOSServiceBridge();
+      var uri = 'luna://com.webos.service.db/find';
+      var params = JSON.stringify({
+          "query": {
+              "from": "com.domain.app"
+          } //"query":{"from":"com.webos.form:1"}             
+      });
+
+      function callback_put(msg) {
+          var response = JSON.parse(msg);
+          var table_body = document.getElementById("tablebody");
+          var i;
+          var row = "";
+
+          for (i = 0; i < response.results.length; i++) {
+              row += "<tr><td>" + response.results[i].id + "</td><td>" + response.results[i].name + "</td><td>" + response.results[i].src + "</td><td>" + response.results[i].dest + "</td><td>" + response.results[i].vid + "</td><td>" + response.results[i].nog + "</td><td>" + response.results[i].fuel + "</td><td>" + response.results[i].dist + "</td></tr>"
+          }
+          table_body.innerHTML = row;
+      }
+      bridge.onservicecallback = callback_put;
+      bridge.call(uri, params);
+
+  }
+</script>
+<!-- style sheet -->
+<style>
+  
+#map-canvas{
+    width:1000px;
+    height:440px;
+    border: 6px solid #0922b3;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}  
+</style>
+<!-- UI -->
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    <div>
+      <img src="logo.png" alt="" width="50" height="50">
+      <a style="font-weight: bold;" class="navbar-brand" href="index.html">Logitics</a>
+    </div>
+    <div>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Hackathon </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Problem</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Innovation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Vision</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">About us</a>
+        </li>
+        
+        </ul>
+    </div>
+  </div>
+</nav>
+</head>
+<body class="bg-light">
+ <div class="container">
+  <h3 id="score" class="mt-5" style="text-align: center;">Realtime Logistic Vehicle Tracker</h3>
+   <p>Logistics tracking refers to the methods and systems used for tracking resources throughout their movement and storage. With logistics tracking you'll know where your products, materials, or other resources are physically located at any time, as well as what is scheduled.</p>
+     <center><hr style="height:2px; border:none; color:#ffffff; background-color:#ffffff; width:35%; margin: 0 auto 0 auto;"></center> 
+
+     <div style="text-align:center;margin: auto; margin-top: 2em; margin-bottom: 2em;">
+      <a><button type="button" id="action" class="btn  " style="background-color: #0922b3; color: white;">Start tracking</button></a>
+      <a href="analytics.html"> <button type="button" class="btn " style="background-color: #0922b3;color: white;">Analytics and Database</button></a>
+     </div>
+     
+     <center><div id="map-canvas" class="mt-5"></div></center>
+
+
+<!-- script for google maps tracking -->
+ <script>
+  window.lat = 12.862848;
+  window.lng = 77.437647;
+
+
+    var map;
+    var mark;
+    var lineCoords = [];
+      
+    var initialize = function() {
+      map  = new google.maps.Map(document.getElementById('map-canvas'), {center:{lat:lat,lng:lng},zoom:12});
+      mark = new google.maps.Marker({position:{lat:lat, lng:lng}, map:map});
+    };
+
+    window.initialize = initialize;
+
+    var redraw = function(payload) {
+      if(payload.message.lat){
+      lat = payload.message.lat;
+      lng = payload.message.lng;
+
+      map.setCenter({lat:lat, lng:lng, alt:0});
+      mark.setPosition({lat:lat, lng:lng, alt:0});
+      
+      lineCoords.push(new google.maps.LatLng(lat, lng));
+
+      var lineCoordinatesPath = new google.maps.Polyline({
+        path: lineCoords,
+        geodesic: true,
+        strokeColor: '#2E10FF'
+      });
+      
+      lineCoordinatesPath.setMap(map);}
+    };
+
+    var pnChannel = "raspi-tracker";
+
+    var pubnub = new PubNub({
+      publishKey:   'pub-c-5d99190b-a6e9-4038-ba1f-3390d5fda49a',
+      subscribeKey: 'sub-c-ba664b80-f11b-11eb-9d61-d6c76bc6f614',
+    });
+        
+    document.querySelector('#action').addEventListener('click', function(){
+        var text = document.getElementById("action").textContent;
+        if(text == "Start Tracking"){
+            pubnub.subscribe({channels: [pnChannel]});
+            pubnub.addListener({message:redraw});
+            document.getElementById("action").classList.add('btn-danger');
+            document.getElementById("action").classList.remove('btn-success');
+            document.getElementById("action").textContent = 'Stop Tracking';
+        }
+        else{
+            pubnub.unsubscribe( {channels: [pnChannel] });
+            document.getElementById("action").classList.remove('btn-danger');
+            document.getElementById("action").classList.add('btn-success');
+            document.getElementById("action").textContent = 'Start Tracking';
+        }
+        });
+    </script>
+ <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDu2_hpAoFh4jiRlHPe5iwXXFTcH8Caa5w&callback=initialize""></script>
+<!-- script for random tracking -->
+ <script>
+  function newPoint(time) {
+        var radius = 0.009;
+        var x = Math.random() * radius;
+        var y = Math.random() * radius;
+        return {lat:window.lat + y, lng:window.lng + x};
+          }
+        setInterval(function() {
+        pubnub.publish({channel:pnChannel, message:newPoint()});
+        }, 500);
+  </script>
+        </body>
+</html>

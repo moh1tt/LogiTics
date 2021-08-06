@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logitics</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<nav class="navbar navbar-light bg-light">
+    <div class="container">
+      <div>
+        <img src="logo.png" alt="" width="50" height="50">
+        <a style="font-weight: bold;" class="navbar-brand" href="index.html">Logitics</a>
+      </div>
+      <div>
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Hackathon </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Problem</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Innovation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">Vision</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-weight: bold; color: black;" href="index.html">About us</a>
+          </li>
+          
+          </ul>
+      </div>
+    </div>
+  </nav>
+</head>
+<body class="bg-light container">
+    <h3 id="score" class="mt-5" style="text-align: center;">Driver Drowsiness Detection</h3>
+    <p>Driver drowsiness detection is a car safety technology which helps prevent accidents caused by the driver getting drowsy. Various studies have suggested that around 20% of all road accidents are fatigue-related, up to 50% on certain roads.</p>
+    
+    
+
+    <div style="text-align:center;margin: auto; margin-top: 2em; margin-bottom: 2em;">
+      <button type="button" class="btn" style="background-color: #0922b3; color: white;" onclick="startcam()">Start Detection</button>
+
+        <button type="button" class="btn " style="background-color: #0922b3; color: white;" onclick="drowsiness()">Get Status</button>
+      </div>
+      <h4 style="text-align: center;">Status and Image is refreshed every 5 second</h4>
+   <br>
+  
+   <h4 style="text-align: center;">Status <span id="status" style="color: rgb(146, 6, 1);"> --</span></h4>
+
+</div>
+<br>
+    <center><img style="width: 1000px; height: 440px; border: 6px solid #0922b3;" id="img" src="" /></center>
+  </div>
+
+
+<script>
+ function drowsiness(){
+        setInterval(function(){
+
+       
+            let request = new XMLHttpRequest();
+            request.open("GET", "http://192.168.0.108:5000/");
+            console.log(request)
+            request.send();
+            
+            request.onload = () => {
+
+                if (request.status === 200) {
+                    // by default the response comes in the string format, we need to parse the data into JSON
+                    let jsonData = JSON.parse(request.response);
+
+
+               
+                        document.getElementById("status").innerHTML = jsonData[0].trigger;
+                        document.getElementById('img').setAttribute('src', "data:image/png;base64,"+jsonData[0].image);
+                    
+                } 
+            }
+          },5000);
+             }
+
+
+  function startcam(){
+    let request = new XMLHttpRequest();
+          request.open("GET", "http://192.168.0.108:5000/startcam");
+          console.log(request)
+          request.send();
+  }
+
+</script>
+    </body>
+</html>

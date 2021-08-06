@@ -1,0 +1,17 @@
+{
+  "id": "com.domain.app",
+  "version": "1.0.0",
+  "vendor": "My Company",
+  "type": "web",
+  "main": "index.html",
+  "title": "LogiTics",
+  "icon": "icon.png",
+  "requiredPermissions": [
+  "time.query",
+  "activity.operation",
+  "database.operation",
+  "database.management",
+  "database",
+  "database.internal"
+  ]
+}
